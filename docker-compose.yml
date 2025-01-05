@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  directories_postgres:
+    image: 'postgres:latest'
+    container_name: "rentProcessorPsql"
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=rent
+    restart: always
