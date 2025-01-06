@@ -1,5 +1,6 @@
 package com.alkl1m.rentdataprocessor.reader;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Тесты для проверки работы ThreadSafeMultiResourceReader")
 class ThreadSafeMultiResourceReaderTest {
 
     @Mock
@@ -24,6 +26,7 @@ class ThreadSafeMultiResourceReaderTest {
     private ThreadSafeMultiResourceReader<String> threadSafeReader;
 
     @Test
+    @DisplayName("Проверка корректного чтения данных при валидном вводе")
     void testRead_ValidData_ReturnsCorrectData() throws Exception {
         when(mockDelegateReader.read()).thenReturn("data");
 
@@ -34,6 +37,7 @@ class ThreadSafeMultiResourceReaderTest {
     }
 
     @Test
+    @DisplayName("Проверка правильной делегации установки ресурсов")
     void testSetResources_ValidResources_DelegatesCorrectly() {
         Resource[] resources = new Resource[0];
 
@@ -43,6 +47,7 @@ class ThreadSafeMultiResourceReaderTest {
     }
 
     @Test
+    @DisplayName("Проверка делегации открытия с валидным контекстом исполнения")
     void testOpen_ValidExecutionContext_DelegatesOpen() {
         ExecutionContext executionContext = new ExecutionContext();
 
@@ -52,9 +57,11 @@ class ThreadSafeMultiResourceReaderTest {
     }
 
     @Test
+    @DisplayName("Проверка делегации закрытия ресурса")
     void testClose_DelegatesClose() {
         threadSafeReader.close();
 
         verify(mockDelegateReader, times(1)).close();
     }
+
 }

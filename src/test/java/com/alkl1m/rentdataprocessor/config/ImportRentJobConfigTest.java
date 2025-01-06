@@ -3,6 +3,7 @@ package com.alkl1m.rentdataprocessor.config;
 import com.alkl1m.rentdataprocessor.entity.Rent;
 import com.alkl1m.rentdataprocessor.repository.RentRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@DisplayName("Тесты для джоб связанных с данными аренды.")
 class ImportRentJobConfigTest {
 
     @Container
@@ -44,9 +46,10 @@ class ImportRentJobConfigTest {
     private RentRepository rentRepository;
 
     @Test
-    void test() {
+    @DisplayName("Тест, проверяющий, что с момента начала запуска сервис прогонит джобу и сохранит 1000 данных об аренде из файла.")
+    void givenNoRentRecords_whenCronJobExecuted_then1000RentRecordsShouldBeCreated() {
         List<Rent> beforeCron = rentRepository.findAll();
-        assertEquals(beforeCron.size(), 0);
+        assertEquals(0, beforeCron.size());
 
         Awaitility.await()
                 .atMost(30, TimeUnit.SECONDS)
