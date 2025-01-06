@@ -2,8 +2,6 @@ package com.alkl1m.rentdataprocessor.reader;
 
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.core.io.Resource;
 
@@ -20,7 +18,7 @@ public class ThreadSafeMultiResourceReader<T> implements ItemReader<T> {
     }
 
     @Override
-    public T read() throws Exception, UnexpectedInputException, ParseException {
+    public T read() throws Exception {
         reentrantLock.lock();
         try {
             return delegateReader.read();

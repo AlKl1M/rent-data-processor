@@ -16,3 +16,5 @@ input:
     rent: /data/*.json
   chunk:
     size: 100
+jobtrigger:
+  fixedRate: 15000
