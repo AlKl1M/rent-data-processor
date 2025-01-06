@@ -9,5 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface RentRepository extends JpaRepository<Rent, UUID> {
+
     Optional<Rent> findByApartmentId(UUID apartmentId);
+
 }

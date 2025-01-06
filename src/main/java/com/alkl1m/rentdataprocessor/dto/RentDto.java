@@ -1,6 +1,5 @@
 package com.alkl1m.rentdataprocessor.dto;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 public record RentDto(

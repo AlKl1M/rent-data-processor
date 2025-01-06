@@ -1,9 +1,11 @@
 package com.alkl1m.rentdataprocessor.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CustomJobExecutionListener implements JobExecutionListener {
 
@@ -14,7 +16,7 @@ public class CustomJobExecutionListener implements JobExecutionListener {
                 .findFirst()
                 .ifPresent(stepExecution -> {
                     long writeCount = stepExecution.getWriteCount();
-                    System.out.println(String.format("%s lines has been written", writeCount));
+                    log.info("{} lines have been written.", writeCount);
                 });
     }
 }

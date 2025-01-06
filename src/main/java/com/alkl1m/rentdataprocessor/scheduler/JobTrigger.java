@@ -1,7 +1,6 @@
 package com.alkl1m.rentdataprocessor.scheduler;
 
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JobTrigger {
 
@@ -27,10 +27,15 @@ public class JobTrigger {
     }
 
     @Scheduled(cron = "0 * * * * *")
-    void launchJobCron() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        var jobParameters = new JobParametersBuilder();
-        jobParameters.addDate("uniqueness", new Date());
-        JobExecution run = this.jobLauncher.run(job, jobParameters.toJobParameters());
-        System.out.println("done");
+    public void launchJobCron() {
+        try {
+            var jobParameters = new JobParametersBuilder();
+            jobParameters.addDate("uniqueness", new Date());
+            JobExecution run = this.jobLauncher.run(job, jobParameters.toJobParameters());
+            log.info("Job executed successfully with status: {}", run.getStatus());
+        } catch (JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException |
+                 JobParametersInvalidException | JobRestartException e) {
+            log.error("Job execution failed", e);
+        }
     }
 }

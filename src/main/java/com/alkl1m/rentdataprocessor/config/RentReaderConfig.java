@@ -47,4 +47,5 @@ public class RentReaderConfig {
                 .strict(false)
                 .build();
     }
+
 }

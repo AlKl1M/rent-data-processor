@@ -25,4 +25,5 @@ public class RentProcessorConfig {
             return rentDto;
         };
     }
+
 }

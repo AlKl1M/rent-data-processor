@@ -14,4 +14,5 @@ public class RentWriterConfig {
     public ItemWriter<RentDto> rentWriter() {
         return rents -> log.info("Writing rent data: {}", rents);
     }
+
 }
