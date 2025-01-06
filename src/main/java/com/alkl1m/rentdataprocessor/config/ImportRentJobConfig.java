@@ -1,6 +1,10 @@
 package com.alkl1m.rentdataprocessor.config;
 
 import com.alkl1m.rentdataprocessor.dto.RentDto;
+import com.alkl1m.rentdataprocessor.entity.Rent;
+import com.alkl1m.rentdataprocessor.listener.CustomJobExecutionListener;
+import com.alkl1m.rentdataprocessor.repository.RentRepository;
+import com.alkl1m.rentdataprocessor.service.RentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -27,11 +31,20 @@ public class ImportRentJobConfig {
     @Value("${input.folder.rent}")
     private Resource[] resources;
 
+    private final CustomJobExecutionListener customJobExecutionListener;
+    private final RentService rentService;
+
+    public ImportRentJobConfig(CustomJobExecutionListener customJobExecutionListener, RentService rentService) {
+        this.customJobExecutionListener = customJobExecutionListener;
+        this.rentService = rentService;
+    }
+
     @Bean
     public Job importRentJob(JobRepository jobRepository, Step importRentStep) {
         return new JobBuilder("importRentJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(importRentStep)
+                .listener(customJobExecutionListener)
                 .build();
     }
 
@@ -40,7 +53,7 @@ public class ImportRentJobConfig {
         return new StepBuilder("importRentStep", jobRepository)
                 .<RentDto, RentDto>chunk(100, platformTransactionManager)
                 .reader(multiResourceItemReader())
-                .processor(ImportRentJobConfig::rentProcessor)
+                .processor(this::rentProcessor)
                 .writer(rents -> System.out.println(rents))
                 .build();
     }
@@ -61,7 +74,8 @@ public class ImportRentJobConfig {
                 .build();
     }
 
-    private static RentDto rentProcessor(RentDto rentDto) {
+    private RentDto rentProcessor(RentDto rentDto) {
+        rentService.saveOrUpdateRent(rentDto);
         return rentDto;
     }
 

@@ -1,0 +1,16 @@
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rent
+    username: postgres
+    password: postgres
+input:
+  folder:
+    rent: /data/*.json
