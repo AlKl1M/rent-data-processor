@@ -24,4 +24,5 @@ public record RentDto(
         String leaseEndDate,
         double monthlyRent
 ) {
+
 }

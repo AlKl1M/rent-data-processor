@@ -30,4 +30,5 @@ public class CustomJobExecutionListener implements JobExecutionListener {
                     log.info("{} lines have been written.", writeCount);
                 });
     }
+
 }
