@@ -3,6 +3,7 @@ package com.alkl1m.rentdataprocessor.config;
 import com.alkl1m.rentdataprocessor.dto.RentDto;
 import com.alkl1m.rentdataprocessor.entity.Rent;
 import com.alkl1m.rentdataprocessor.listener.CustomJobExecutionListener;
+import com.alkl1m.rentdataprocessor.reader.MultiResourceReaderThreadSafe;
 import com.alkl1m.rentdataprocessor.repository.RentRepository;
 import com.alkl1m.rentdataprocessor.service.RentService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.VirtualThreadTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -52,10 +54,22 @@ public class ImportRentJobConfig {
     public Step importRentStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("importRentStep", jobRepository)
                 .<RentDto, RentDto>chunk(100, platformTransactionManager)
-                .reader(multiResourceItemReader())
+                .reader(multiResourceReaderThreadSafe())
                 .processor(this::rentProcessor)
                 .writer(rents -> System.out.println(rents))
+                .taskExecutor(virtualThreadTaskExecutor())
                 .build();
+    }
+
+    @Bean
+    public VirtualThreadTaskExecutor virtualThreadTaskExecutor() {
+        return new VirtualThreadTaskExecutor("Rent-Thread-Executor-");
+    }
+
+    public MultiResourceReaderThreadSafe<RentDto> multiResourceReaderThreadSafe() {
+        var multiResourceReader = new MultiResourceReaderThreadSafe<>(multiResourceItemReader());
+        multiResourceReader.setResources(resources);
+        return multiResourceReader;
     }
 
     public MultiResourceItemReader<RentDto> multiResourceItemReader() {
