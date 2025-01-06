@@ -2,6 +2,11 @@ package com.alkl1m.rentdataprocessor.dto;
 
 import java.util.UUID;
 
+/**
+ * ДТО сущности аренды.
+ *
+ * @author AlKl1M
+ */
 public record RentDto(
         UUID apartmentId,
         String address,
@@ -18,4 +23,5 @@ public record RentDto(
         String leaseStartDate,
         String leaseEndDate,
         double monthlyRent
-) {}
+) {
+}

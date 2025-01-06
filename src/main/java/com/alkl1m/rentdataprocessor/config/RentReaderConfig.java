@@ -13,6 +13,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
+/**
+ * Конфигурация для чтения данных аренды с использованием потокобезопасного многоресурсного чтения.
+ * Класс создаёт бины для конфигурации чтения данных аренды из нескольких ресурсов с помощью
+ * ThreadSafeMultiResourceReader, MultiResourceItemReader и JsonItemReader.
+ *
+ * @author AlKl1M
+ */
 @Slf4j
 @Configuration
 public class RentReaderConfig {
@@ -20,6 +27,12 @@ public class RentReaderConfig {
     @Value("${input.folder.rent}")
     private Resource[] rentInputResources;
 
+    /**
+     * Метод создаёт и настраивает потокобезопасный многоресурсный читатель для данных аренды.
+     * Устанавливает ресурсы для чтения и возвращает настроенный объект ThreadSafeMultiResourceReader.
+     *
+     * @return настроенный ThreadSafeMultiResourceReader для данных аренды
+     */
     @Bean
     public ThreadSafeMultiResourceReader<RentDto> rentResourceReader() {
         log.info("Configuring ThreadSafeMultiResourceReader for rent resources");
@@ -28,6 +41,12 @@ public class RentReaderConfig {
         return multiResourceReader;
     }
 
+    /**
+     * Метод создаёт и настраивает MultiResourceItemReader для данных аренды.
+     * Настроенный читатель будет использовать JsonItemReader для обработки данных в формате JSON.
+     *
+     * @return настроенный MultiResourceItemReader для данных аренды
+     */
     @Bean
     public MultiResourceItemReader<RentDto> multiResourceItemReader() {
         log.info("Creating MultiResourceItemReader for rent resources");
@@ -38,6 +57,12 @@ public class RentReaderConfig {
                 .build();
     }
 
+    /**
+     * Метод создаёт и настраивает JsonItemReader для данных аренды.
+     * Используется JacksonJsonObjectReader для чтения объектов RentDto в формате JSON.
+     *
+     * @return настроенный JsonItemReader для данных аренды
+     */
     @Bean
     public ResourceAwareItemReaderItemStream<RentDto> jsonRentItemReader() {
         log.info("Creating JsonItemReader for rent data");

@@ -12,6 +12,13 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * Сущность аренды.
+ * Класс представляет сущность аренды, которая хранится в базе данных и содержит информацию о квартире,
+ * арендаторе и договоре аренды.
+ *
+ * @author AlKl1M
+ */
 @Entity
 @Getter
 @Setter
@@ -54,6 +61,13 @@ public class Rent {
 
     private double monthlyRent;
 
+    /**
+     * Метод для преобразования объекта RentDto в сущность Rent.
+     * Копирует данные из объекта RentDto в новый объект Rent.
+     *
+     * @param rentDto объект RentDto, содержащий данные аренды
+     * @return новый объект Rent с данными из rentDto
+     */
     public static Rent fromDto(RentDto rentDto) {
         Rent rent = new Rent();
         rent.setApartmentId(rentDto.apartmentId());

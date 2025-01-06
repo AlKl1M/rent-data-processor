@@ -3,6 +3,7 @@ package com.alkl1m.rentdataprocessor.service;
 import com.alkl1m.rentdataprocessor.dto.RentDto;
 import com.alkl1m.rentdataprocessor.entity.Rent;
 import com.alkl1m.rentdataprocessor.repository.RentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +11,10 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RentService {
 
     private final RentRepository rentRepository;
-
-    public RentService(RentRepository rentRepository) {
-        this.rentRepository = rentRepository;
-    }
 
     public void saveOrUpdateRent(RentDto rentDto) {
         log.info("Saving or updating rent with apartment ID: {}", rentDto.apartmentId());

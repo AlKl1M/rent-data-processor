@@ -1,5 +1,6 @@
 package com.alkl1m.rentdataprocessor.scheduler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -9,25 +10,27 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ * Запускает задачи по расписанию.
+ *
+ * @author AlKl1M
+ */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JobTrigger {
 
-    private final JobLauncher jobLauncher;
     private final Job job;
+    private final JobLauncher jobLauncher;
 
-
-    public JobTrigger(JobLauncher jobLauncher, Job job) {
-        this.jobLauncher = jobLauncher;
-        this.job = job;
-    }
-
+    /**
+     * Метод запускает задание по расписанию.
+     */
     @Scheduled(fixedRateString = "${jobtrigger.fixedRate}")
     public void launchJobCron() {
         try {
@@ -40,4 +43,5 @@ public class JobTrigger {
             log.error("Job execution failed", e);
         }
     }
+
 }
